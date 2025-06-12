@@ -1,9 +1,39 @@
-// src/controllers/user-controller.ts
-import { Request, Response } from "express";
+// src/controllers/user-controller.ts 
+import { Request, Response } from 'express';
+import { UserService } from "../services/user/user-service";
+import { UserRepository } from "../repositories/user/user-respository";
+import { LoginBody } from "../interfaces/user-interface";
 
-//Controlador de prueba
-const testUser = (req: Request, res: Response) => {
-    res.send('Hello World!')
-};
+const userRepo = new UserRepository();
+const userService = new UserService(userRepo);
 
-export { testUser };
+export class UserController {
+    // Método de Login (usando JWT)
+    async login(req: Request, res: Response) {
+
+        //Obtener los datos del body de la solicitud
+        const { email, password } = req.body as LoginBody;
+        try {
+
+            //Intentar iniciar sesión con el servicio de usuario login
+            const loginResponse = await userService.login(email, password);
+
+            // Respuesta de error si las credenciales son inválidas. 401 (No autenticado)
+            if (!loginResponse) {
+                res.status(401).json({ message: "Credenciales inválidas" });
+                return;
+            }
+
+            //Si las credenciales son válidas devuelve el token y el usuario. 200 (OK)
+            res.status(200).json({
+                status: "loggedIn",
+                message: "Usuario autentificado correctamente",
+                data: loginResponse,
+            });
+        } catch (error) {
+            //Error en el servidor
+            res.status(500).json({ message: "Internal Server Error", error });
+        }
+    }
+
+}
