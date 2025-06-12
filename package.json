@@ -1,0 +1,50 @@
+{
+  "name": "prueba_enmedio",
+  "version": "1.0.0",
+  "description": "Backend para registro de tranzas",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "npx tsc && node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "commonjs",
+  "_moduleAliases": {
+    "@/routes": "dist/routes",
+    "@/middleware": "dist/middleware",
+    "@/controllers": "dist/controllers"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pipefake/prueba_enmedio.git"
+  },
+  "keywords": [
+    "API",
+    "REST",
+    "MERN",
+    "MONGODB",
+    "EXPRESS",
+    "NODEJS",
+    "BACKEND",
+    "TRANZAS",
+    "TRANSACTIONS",
+    "POSTGRESQL"
+  ],
+  "author": "Juan Felipe Jiménez Salazar",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^24.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "jwt-simple": "^0.5.6",
+    "mongoose": "^8.15.1",
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
