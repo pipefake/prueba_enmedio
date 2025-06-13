@@ -1,34 +1,38 @@
-import { User } from "../../interfaces/user-interface";
 import { IUserRepository, IUserService, LoginResponse } from "../../interfaces/user-repository-interface";
 import bcrypt from "bcrypt";
 import { createToken } from '../jwt';
 
 export class UserService implements IUserService {
+    private postgresUserRepository: IUserRepository;
+    private mongoUserRepository: IUserRepository;
 
-    // Repositorio de usuarios
-    private userRepository: IUserRepository;
-
-    // Constructor que recibe el repositorio de usuarios
-    constructor(userRepository: IUserRepository) {
-        this.userRepository = userRepository;
+    constructor(
+        postgresUserRepository: IUserRepository,
+        mongoUserRepository: IUserRepository
+    ) {
+        this.postgresUserRepository = postgresUserRepository;
+        this.mongoUserRepository = mongoUserRepository;
     }
 
-    // Método para iniciar sesión
     async login(email: string, password: string): Promise<LoginResponse | null> {
 
-        //Buscar si existe el usuario por el email o por el nick 
-        const user = await this.userRepository.findUserByEmailOrNick({ email });
-        if (!user) return null;
+        // console.log(email, password);
 
-        //Verificar si la contraseña es correcta
-        const isPasswordValid = bcrypt.compare(password, user.password ?? "");
+        // Buscar usuario en ambas bases de datos
+        const userFromPostgres = await this.postgresUserRepository.findUserByEmailOrNick({ email });
+        const userFromMongo = await this.mongoUserRepository.findUserByEmailOrNick({ email });
+
+        // Validar que exista en ambas
+        if (!userFromPostgres || !userFromMongo) return null;
+
+        // Validar contraseña con el usuario de PostgreSQL
+        const isPasswordValid = await bcrypt.compare(password, userFromMongo.password ?? "");
         if (!isPasswordValid) return null;
 
-        // Generar token de autenticación (JWT)
-        const token = createToken(user);
+        // Generar token con el usuario de PostgreSQL
+        const token = createToken(userFromPostgres);
         if (!token) return null;
 
-        return { token, user: user };
+        return { token, user: userFromPostgres };
     }
-
 }

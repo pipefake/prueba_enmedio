@@ -1,6 +1,6 @@
 // Interfaz que define un usuario
 export interface User {
-    _id: string;
+    _id?: string;
     name: string;
     last_name: string;
     nick: string;

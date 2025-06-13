@@ -17,7 +17,7 @@ const TransactionSchema = new Schema<Transaction>({
     },
     cardMasked: {
         type: String,
-        required: true
+        required: false
     },
     transactionType: {
         type: String,
@@ -25,10 +25,15 @@ const TransactionSchema = new Schema<Transaction>({
     },
     status: {
         type: String,
-        required: true
+        required: false
     }
-}, { timestamps: true });
+}, {
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
+});
 
-const TransactionModel = model<Transaction>('Transaction', TransactionSchema)
+const TransactionModel = model<Transaction>('Transaction', TransactionSchema);
 
-export default TransactionModel
+export default TransactionModel;

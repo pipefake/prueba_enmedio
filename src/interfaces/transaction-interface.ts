@@ -1,12 +1,17 @@
 // Interfaz que define una transacción
-export interface Transaction {
-    _id: string;
+export interface TransactionInput {
     terminalId: string;
     amount: number;
     currency: string;
     cardMasked?: string;
     transactionType: string;
     status?: string;
+}
+
+// Resultado con timestamps e id
+export interface Transaction extends TransactionInput {
+    id?: number; // Sequelize
+    _id?: string; // MongoDB
     created_at: Date;
     updated_at: Date;
 }
@@ -28,4 +33,6 @@ export interface FiltroTransacciones {
     fechaFin?: Date;
     terminalId?: string;
     status?: string;
+    page?: number;
+    limit?: number;
 }

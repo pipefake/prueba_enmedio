@@ -45,7 +45,7 @@ const router = express.Router();
  *       401:
  *         description: Credenciales incorrectas
  */
-router.post('/transactions', ensureAuth(), transactionsController.insertTransaction); // ruta para insertar transacciones
+router.post('/transactions', ensureAuth(), (req, res) => transactionsController.insertTransaction(req, res)); // ruta para insertar transacciones
 /**
  * @swagger
  * /api/v1/transactions:
@@ -59,7 +59,7 @@ router.post('/transactions', ensureAuth(), transactionsController.insertTransact
  *       403:
  *         description: No tiene permisos para acceder a esta ruta
  */
-router.get('/transactions', ensureAuth(), transactionsController.listarTransacciones); // ruta para listar transacciones
+router.get('/transactions', ensureAuth(), (req, res) => transactionsController.listarTransacciones(req, res)); // ruta para listar transacciones
 
 //Exportar el enrutador
 export default router;

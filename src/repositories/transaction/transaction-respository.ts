@@ -16,6 +16,7 @@ export class TransactionRepository implements ITransactionRepository {
         //Se arma el query
         const query: any = {};
 
+        //Validar que el filtro por fecha inicial y fecha fin exista 
         if (filtros.fechaInicio || filtros.fechaFin) {
             query.createdAt = {};
             if (filtros.fechaInicio) {
@@ -26,14 +27,25 @@ export class TransactionRepository implements ITransactionRepository {
             }
         }
 
+        //Validar que el filtro por terminalId exista
         if (filtros.terminalId) {
             query.terminalId = filtros.terminalId;
         }
 
+        //Validar que el filtro por el status exista
         if (filtros.status) {
             query.status = filtros.status;
         }
 
-        return await TransactionModel.find(query).sort({ createdAt: -1 });
+        // Paginación
+        const page = filtros.page || 1;
+        const limit = filtros.limit || 10;
+        const skip = (page - 1) * limit;
+
+        //Se envia la query con los filtros
+        return await TransactionModel.find(query)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
     }
 }

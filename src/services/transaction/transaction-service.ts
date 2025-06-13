@@ -2,33 +2,40 @@ import { ITransactionService, ITransactionRepository, Transaction, FiltroTransac
 
 export class TransactionService implements ITransactionService {
 
-    // Repositorio de transacciones
-    private transactionRepository: ITransactionRepository;
+    private postgresUserRepository: ITransactionRepository;
+    private mongoUserRepository: ITransactionRepository;
 
-    // Constructor que recibe el repositorio de transacciones
-    constructor(transactionRepository: ITransactionRepository) {
-        this.transactionRepository = transactionRepository;
+    constructor(
+        postgresUserRepository: ITransactionRepository,
+        mongoUserRepository: ITransactionRepository
+    ) {
+        this.postgresUserRepository = postgresUserRepository;
+        this.mongoUserRepository = mongoUserRepository;
     }
 
-    // Método para crear una transacción
+    // Crear una transacción en ambos repositorios
     async createTransaction(transaction: Transaction): Promise<Transaction | null> {
+        // Crear en MongoDB
+        const mongoTransaction = await this.mongoUserRepository.createTransaction(transaction);
+        // Crear en Postgres
+        const postgresTransaction = await this.postgresUserRepository.createTransaction(transaction);
 
-        //Validar la inserción de la transacción
-        const transactionResponse = await this.transactionRepository.createTransaction(transaction);
-        if (!transactionResponse) return null;
+        // Si alguna falla, puedes manejar el error según tu lógica de negocio
+        if (!mongoTransaction || !postgresTransaction) return null;
 
-        return transactionResponse;
+        // Puedes retornar la transacción creada en uno de los repositorios (por ejemplo, MongoDB)
+        return mongoTransaction;
     }
 
+    // Listar transacciones combinando ambos repositorios
     async listarTransacciones(filtros: FiltroTransacciones = {}): Promise<Transaction[]> {
+        const mongoTransactions = await this.mongoUserRepository.listarTransacciones(filtros) || [];
+        const postgresTransactions = await this.postgresUserRepository.listarTransacciones(filtros) || [];
 
-        const listarTransaccionesResponse = await this.transactionRepository.listarTransacciones(filtros);
-
-        if (!listarTransaccionesResponse) {
+        if (!mongoTransactions || !postgresTransactions) {
             return [];
         }
 
-        return listarTransaccionesResponse || [];
+        return mongoTransactions || [];
     }
-
 }

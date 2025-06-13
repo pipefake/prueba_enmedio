@@ -1,11 +1,17 @@
 // src/controllers/user-controller.ts 
 import { Request, Response } from 'express';
-import { UserService } from "../services/user/user-service";
-import { UserRepository } from "../repositories/user/user-respository";
 import { LoginBody } from "../interfaces/user-interface";
+import { UserService } from '../services/user/user-service';
+import { UserRepository as PostgresUserRepository } from '../repositories/user/user-repositorypsql';
+import { UserRepository as MongoUserRepository } from '../repositories/user/user-respository'; // Asegúrate de que el nombre del archivo sea correcto
 
-const userRepo = new UserRepository();
-const userService = new UserService(userRepo);
+// Instanciar ambos repositorios
+const postgresRepo = new PostgresUserRepository();
+const mongoRepo = new MongoUserRepository();
+
+// Pasar ambos al servicio
+const userService = new UserService(postgresRepo, mongoRepo);
+
 
 export class UserController {
     // Método de Login (usando JWT)
