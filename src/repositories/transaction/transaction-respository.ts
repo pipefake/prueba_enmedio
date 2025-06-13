@@ -1,4 +1,4 @@
-import { Transaction } from '../../interfaces/transaction-interface';
+import { Transaction, FiltroTransacciones } from '../../interfaces/transaction-interface';
 import TransactionModel from "../../models/transaction-model";
 import { ITransactionRepository } from "../../interfaces/transaction-interface";
 
@@ -10,8 +10,30 @@ export class TransactionRepository implements ITransactionRepository {
         return transactionCreate;
     }
 
-    async listarTransacciones(): Promise<Transaction[]> {
-        const transactions = await TransactionModel.find().sort({ createdAt: -1 });
-        return transactions;
+    // Método para listar las transacciones
+    async listarTransacciones(filtros: FiltroTransacciones = {}): Promise<Transaction[]> {
+
+        //Se arma el query
+        const query: any = {};
+
+        if (filtros.fechaInicio || filtros.fechaFin) {
+            query.createdAt = {};
+            if (filtros.fechaInicio) {
+                query.createdAt.$gte = filtros.fechaInicio;
+            }
+            if (filtros.fechaFin) {
+                query.createdAt.$lte = filtros.fechaFin;
+            }
+        }
+
+        if (filtros.terminalId) {
+            query.terminalId = filtros.terminalId;
+        }
+
+        if (filtros.status) {
+            query.status = filtros.status;
+        }
+
+        return await TransactionModel.find(query).sort({ createdAt: -1 });
     }
 }

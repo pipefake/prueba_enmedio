@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { TransactionService } from "../services/transaction/transaction-service";
 import { TransactionRepository } from "../repositories/transaction/transaction-respository";
-import { Transaction } from "../interfaces/transaction-interface";
+import { Transaction, FiltroTransacciones } from "../interfaces/transaction-interface";
 
 const transactionRepo = new TransactionRepository();
 const transactionService = new TransactionService(transactionRepo);
@@ -44,8 +44,18 @@ export class TransactionsController {
 
     // Método para listar las transacciones
     async listarTransacciones(req: Request, res: Response) {
+
+        const { fechaInicio, fechaFin, terminalId, status } = req.query;
+
+        const filtros: FiltroTransacciones = {
+            fechaInicio: fechaInicio ? new Date(fechaInicio as string) : undefined,
+            fechaFin: fechaFin ? new Date(fechaFin as string) : undefined,
+            terminalId: terminalId as string,
+            status: status as string
+        };
+
         try {
-            const transacciones = await transactionService.listarTransacciones();
+            const transacciones = await transactionService.listarTransacciones(filtros);
             res.status(200).json({
                 status: "success",
                 data: transacciones,

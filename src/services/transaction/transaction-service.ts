@@ -1,4 +1,4 @@
-import { ITransactionService, ITransactionRepository, Transaction } from "../../interfaces/transaction-interface";
+import { ITransactionService, ITransactionRepository, Transaction, FiltroTransacciones } from "../../interfaces/transaction-interface";
 
 export class TransactionService implements ITransactionService {
 
@@ -20,15 +20,15 @@ export class TransactionService implements ITransactionService {
         return transactionResponse;
     }
 
-    async listarTransacciones(): Promise<Transaction[]> {
+    async listarTransacciones(filtros: FiltroTransacciones = {}): Promise<Transaction[]> {
 
-        const listarTransaccionesResponse = await this.transactionRepository.listarTransacciones();
+        const listarTransaccionesResponse = await this.transactionRepository.listarTransacciones(filtros);
 
         if (!listarTransaccionesResponse) {
             return [];
         }
 
-        return listarTransaccionesResponse;
+        return listarTransaccionesResponse || [];
     }
 
 }
