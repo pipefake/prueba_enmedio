@@ -26,7 +26,7 @@ export class TransactionsController {
 
             //  Si no se pudo crear la transacción, devolver un error 400 (Unauthorized)
             if (!createTransactionResponse) {
-                res.status(400).json({ message: "Credenciales inválidas" });
+                res.status(400).json({ message: "No se pudo crear la transacción" });
                 return;
             }
 
@@ -42,4 +42,16 @@ export class TransactionsController {
         }
     }
 
+    // Método para listar las transacciones
+    async listarTransacciones(req: Request, res: Response) {
+        try {
+            const transacciones = await transactionService.listarTransacciones();
+            res.status(200).json({
+                status: "success",
+                data: transacciones,
+            });
+        } catch (error) {
+            res.status(500).json({ message: "Internal Server Error", error });
+        }
+    }
 }

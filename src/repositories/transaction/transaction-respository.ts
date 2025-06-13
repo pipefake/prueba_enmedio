@@ -9,4 +9,9 @@ export class TransactionRepository implements ITransactionRepository {
         const transactionCreate = await TransactionModel.create(transaction);
         return transactionCreate;
     }
+
+    async listarTransacciones(): Promise<Transaction[]> {
+        const transactions = await TransactionModel.find().sort({ createdAt: -1 });
+        return transactions;
+    }
 }

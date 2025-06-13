@@ -20,4 +20,15 @@ export class TransactionService implements ITransactionService {
         return transactionResponse;
     }
 
+    async listarTransacciones(): Promise<Transaction[]> {
+
+        const listarTransaccionesResponse = await this.transactionRepository.listarTransacciones();
+
+        if (!listarTransaccionesResponse) {
+            return [];
+        }
+
+        return listarTransaccionesResponse;
+    }
+
 }

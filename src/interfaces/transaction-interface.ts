@@ -14,6 +14,7 @@ export interface Transaction {
 //Interfaz que define los métodos del repositorio de transacción
 export interface ITransactionRepository {
     createTransaction(transaction: Transaction): Promise<Transaction>
+    listarTransacciones(): Promise<Transaction[]>
 }
 
 //interfaz que define los métodos del servicio de transacción

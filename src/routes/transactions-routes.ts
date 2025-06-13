@@ -12,6 +12,8 @@ const router = express.Router();
  * /api/v1/transactions:
  *   post:
  *     summary: Insertar una transacción
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -43,7 +45,21 @@ const router = express.Router();
  *       401:
  *         description: Credenciales incorrectas
  */
-router.post('/transactions', ensureAuth(), transactionsController.insertTransaction); // ruta para el login
+router.post('/transactions', ensureAuth(), transactionsController.insertTransaction); // ruta para insertar transacciones
+/**
+ * @swagger
+ * /api/v1/transactions:
+ *   get:
+ *     summary: Listar transacciones
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Listado de transacciones exitoso
+ *       403:
+ *         description: No tiene permisos para acceder a esta ruta
+ */
+router.get('/transactions', ensureAuth(), transactionsController.listarTransacciones); // ruta para listar transacciones
 
 //Exportar el enrutador
 export default router;
