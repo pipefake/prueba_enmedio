@@ -5,15 +5,16 @@ import connection from "./config/conecction";
 import swaggerJSDoc from "swagger-jsdoc";
 import { openapiSpecification } from "./config/swagger-config";
 import swaggerUi from 'swagger-ui-express';
+// Importar las rutas de usuario
+import userRoutes from './routes/user-router';
+// Importar las rutas de usuario
+import transactionsRoutes from './routes/transactions-routes';
 
 // Mensaje de Bienvenida para verificare ejecutó la API de Node
 console.log("API Node en ejecución");
 
 // Usar la conexión a la Base de Datos
 connection();
-
-// Importar las rutas de usuario
-import userRoutes from './routes/user-router';
 
 // Crear una instancia de Express
 const app = express();
@@ -31,6 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 
 //Rutas de la API de usuarios
 app.use('/api/user', userRoutes);
+
+//Rutas de la API de transactions
+app.use('/api/v1', transactionsRoutes);
 
 //Configuración de CORS para permitir solicitudes desde ciertos origins, actualmente permite todas las solicitudes
 app.use(cors({
