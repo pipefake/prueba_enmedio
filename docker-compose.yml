@@ -1,7 +1,7 @@
 services:
   backend:
     build: .
-    container_name: prueba_enmedio_backend
+    container_name: enmedio_backend
     ports:
       - "3000:3000"
     env_file:
@@ -20,12 +20,11 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_HOST=${DB_HOST}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./databases/init:/docker-entrypoint-initdb.d
+      - ./src/databases:/docker-entrypoint-initdb.d
 
   mongodb:
     image: mongo:7
