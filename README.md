@@ -63,9 +63,8 @@ Construir un servicio backend que reciba y procese trazas simuladas de un datafo
 ```bash
 git clone https://github.com/pipefake/prueba_enmedio.git
 cd prueba_enmedio
-
-
-```json
+```
+json
 {
   "terminalId": "POS1234",
   "amount": 35000,
@@ -80,7 +79,7 @@ cd prueba_enmedio
 1. Clonar el repositorio.
 2. Instalar las dependencias:
 
-    ```bash
+```bash
 npm install
 ```
 
@@ -88,7 +87,7 @@ npm install
 
 1. Arrancar el proyecto:
 
-    ```bash
+```bash
 npm run dev
 ```
 
@@ -98,14 +97,19 @@ npm run dev
 
 1. Construir el proyecto:
 
-    ```bash
+```bash
 npm run build
 ```
 
 2. Iniciar el servidor:
 
-    ```bash
+```bash
 npm run start
+```
+
+Para entorno de desarrollo
+```bash
+npm run dev
 ```
 
 3. Acceder a la documentación en Swagger en [http://localhost:3000/api-docs](http://localhost:3000/api-docs).
